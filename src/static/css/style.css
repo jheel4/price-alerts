@@ -1,0 +1,10 @@
+.form-size {
+    max-width: 640px;
+    margin:0 auto;
+}
+
+.center{
+    width:640px;
+    text-align:center;
+    margin:0 auto;
+}

@@ -2,14 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Pricing Service</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Price Alerts</title>
 
-    {% include 'html_dependencies.html' %}
+    {% include 'html_dependencies.jinja2' %}
 </head>
 <body>
-{% block content %}
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <div class="container">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="/" title="Home">Pricing</a>
+        <div id="navbarNav" class="navbar-collapse collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('stores.index') }}">Stores</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('stores.index') }}">Alerts</a></li>
+            </ul>
+            {% if session['email'] %}
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('users.user_alerts') }}"><i class="fa fa-exclamation"></i> Your Alerts</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('users.logout_user') }}"><i class="fa fa-sign-out"></i> Log out</a></li>
+                </ul>
+            {% else %}
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('users.register_user') }}"><i class="fa fa-user"></i> Sign up</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('users.login_user') }}"><i class="fa fa-sign-in"></i> Log in</a></li>
+                </ul>
+            {% endif %}
 
-{% endblock %}
+        </div>
+    </div>
+</nav>
+<div class="container">
+    {% block content %}
+
+    {% endblock %}
+</div>
 
 </body>
 </html>

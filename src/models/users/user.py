@@ -2,6 +2,7 @@ import uuid
 from src.common.database import Database
 from src.common.utils import Utils
 import src.models.users.errors as UserErrors
+from src.models.alerts.alert import Alert
 
 
 class User(object):
@@ -26,7 +27,7 @@ class User(object):
         user_data = Database.find_one('users',{'email':email})
         if user_data is None:
             # Tell the user that the email does not exist
-            raise UserErrors.UserNotExistsError("Your user does not exist.")
+            raise UserErrors.UserNotExistsError("Your username does not exist.")
         if not Utils.check_hashed_password(password,user_data['password']):
             # Tell the user that the password is wrong
             raise UserErrors.IncorrectPasswordError("Your password is not correct.")
@@ -58,3 +59,12 @@ class User(object):
             "email":self.email,
             "password":self.password
         }
+
+    @classmethod
+    def find_by_email(cls,email):
+        user=Database.find_one('users',{'email':email})
+        User=cls(**user)
+        return User
+
+    def get_alerts(self):
+        return Alert.find_by_user_email(self.email)

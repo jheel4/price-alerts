@@ -10,42 +10,44 @@ def login_user():
     if request.method=='POST':
         # Check login is valid
         email = request.form['email']
-        password = request.form['hashed']
+        password = request.form['password']
         try:
             if User.is_login_valid(email,password):
                 session['email'] = email
                 return redirect(url_for('.user_alerts'))
         except UserErrors.UserError as e:
             return e.message
-    return render_template('users/login.html')
+    return render_template('users/login.jinja2')
 
 
 @user_blueprint.route('/register',methods=['POST','GET'])
 def register_user():
     if request.method=='POST':
         email = request.form['email']
-        password = request.form['hashed']
+        password = request.form['password']
         try:
             if User.register_user(email,password):
                 session['email'] = email
                 return redirect(url_for('.user_alerts'))
         except UserErrors.UserError as e:
             return e.message
-    return "Still here"
+    return render_template("users/register.jinja2")
 
 
 @user_blueprint.route('/alerts')
 def user_alerts():
-    return "This is the user's alert page"
-
+    user=User.find_by_email(session['email'])
+    alerts=user.get_alerts()
+    return render_template('users/alerts.jinja2',alerts=alerts)
 
 @user_blueprint.route('/logout')
 def logout_user():
-    pass
+    session['email']=None
+    return redirect(url_for('home'))
 
 
 @user_blueprint.route('/check_alerts/<string:user_id>')
-def check_user_akerts(user_id):
+def check_user_alerts(user_id):
     pass
 
 
